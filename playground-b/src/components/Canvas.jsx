@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import Player from '../classes/Player'
 
 export default function Canvas() {
   /**
@@ -14,38 +15,24 @@ export default function Canvas() {
     const context = canvas.getContext("2d"); // get 2d context from canvas
     contextRef.current = context; // store for later usage
 
-    // Draw something on the canvas
-    context.fillStyle = "white";
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    const player = new Player();
+
+    function animate() {
+      window.requestAnimationFrame(animate);
+
+      // Clear the canvas
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Redraw the background
+      context.fillStyle = "white";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+
+      player.draw(context);
+      player.update(canvas);
+    }
 
     animate();
   }, []);
-
-  let y = 100;
-  let bottom = y + 100;
-  const height = 100;
-
-  function animate() {
-    const canvas = canvasRef.current;
-    const context = contextRef.current;
-
-    window.requestAnimationFrame(animate);
-
-    // Clear the canvas
-    context.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Redraw the background
-    context.fillStyle = "white";
-    context.fillRect(0, 0, canvas.width, canvas.height);
-
-    context.fillStyle = "red";
-    context.fillRect(100, y, 100, height);
-
-    if (bottom < canvas.height) {
-      y++;
-      bottom = y + 100;
-    }
-  }
 
   return (
     <>
